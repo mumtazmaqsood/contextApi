@@ -1,70 +1,76 @@
-# Getting Started with Create React App
+ContextApi
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+What is the purpose of contextAPI?
 
-## Available Scripts
+Normally, props are using to transfer state of the component, props are transferring state from Parent  Child  Grand-Child and so on … the problem is that through props we cannot transfer state directly from Parent Grand-Child, we have to carry state through proper hierarchy, in case of missing one component means, state will not transfer to other component. 
 
-In the project directory, you can run:
+Example:
+        Here is a App component
+        function App() {
+        return (
+            <div>
+            <h1>ContextApi</h1>
+            <Parent value={5} />
+            </div>
+        );
+        }
 
-### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Parent Component
+        function Parent({value}) {
+            return(
+                <div>
+                    <h2>Parent Componen</h2>
+                    <Child appValue = {value}/>
+                </div>
+            );
+        }
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
 
-### `npm test`
+Child Component
+        function Child({appValue}) {
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+            return(
+                <div>
+                    <h3>Child Component {appValue}</h3>
+                </div>
+            );
+        }
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+In above components, in app, parent component hold value 5, and this value passes through props to child and inside child component value is displaying. But in case, skip the parent component and pass directly there is no value transferred to child component.  
+	
+So, the contextApi is the solution of this problem. We create contextApi and wrap it with root component and that value/state is available to all its child components.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Step 1: create the context 
+        import { createContext } from "react";
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+        const countContext = createContext(1);
 
-### `npm run eject`
+        export default countContext;
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+on step 2: wrap this contextApi 
+        function App() {
+        return (
+            <countContext.Provider value={100}>
+            <div>
+            <h1>ContextApi</h1>
+            <Parent />
+            </div>
+            </countContext.Provider>
+        );
+        }
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Here is parent component is wrapped, inside parent there is a child component, value is available to all its child components, child can directly access this value/state.
+ 
+At step 3, access directly this value in a child component 
+        function Child() {
+            let value = useContext(countContext);
+            return(
+                <div>
+                    <h3>Child Component {value}</h3>
+                </div>
+            );
+        }
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+     
