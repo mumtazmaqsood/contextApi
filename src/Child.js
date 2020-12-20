@@ -8,6 +8,8 @@ function Child() {
     return(
         <div>
             <h3>Child Component {value}</h3>
+            <button onClick= { ()=> {value[1](++value[0])}}> Increament </button>
+            <button onClick= { ()=> {value[1](--value[0])}}> Decrement </button>
         </div>
     );
 }

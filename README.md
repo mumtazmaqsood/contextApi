@@ -73,4 +73,35 @@ At step 3, access directly this value in a child component
             );
         }
 
+
+Let do it little complicated, we want to increment in that value on button click even, so value is state variable , child cannot make increment, but there is a option , if parent component allow this child to change this value then child can do it 
+
+    function App() {  
+        let valueCount = useState(1);
+        return (
+            <countContext.Provider value={valueCount}>
+            <div>
+            <h1>ContextApi</h1>
+            <Parent />
+            </div>
+            </countContext.Provider>
+        );
+    }
+
+
+    useState hook created and pass this state to contextApi provider, as we know useState return in array , on 0th index there is initial state and on first index there is a function, if child want to make change it has to access this function and then state can be change.
+
+        function Child() {
+            let value = useContext(countContext);
+            return(
+                <div>
+                    <h3>Child Component {value}</h3>
+                    <button onClick= { ()=> {value[1](++value[0])}}> Increament </button>
+                </div>
+            );
+        }
+
+ 
+    So in child component, it access that function and make increment in that value. 
+
      

@@ -6,8 +6,9 @@ import countContext from './ValueContext';
 
 function App() {
   
+  let valueCount = useState(1);
   return (
-    <countContext.Provider value={100}>
+    <countContext.Provider value={valueCount}>
     <div>
       <h1>ContextApi</h1>
       <Parent />
